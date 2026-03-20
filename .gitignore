@@ -1,0 +1,9 @@
+# Ignorar variables de entorno y secretos
+.env
+
+# Ignorar todos los documentos PDF locales
+*.pdf
+
+# Ignorar carpetas temporales de Python
+__pycache__/
+.venv/
