@@ -11,16 +11,37 @@ from dotenv import load_dotenv
 
 # Carga las variables ocultas del archivo .env
 load_dotenv()
+#----------------------------------------------
+# --> NOMBRE DE PESTAÑA
+st.set_page_config(page_title='APP ANALIZA SENTENCIAS JUDICIALES', initial_sidebar_state="collapsed") # PARA ICONO:  img=imagen.png -> ,page_icon= "img" 
+#----------------------------------------------
+# --> IMAGEN BANNER
+img = Image.open ("banner.jpg")
 
-st.title("⚖️ Analizador de Sentencias Judiciales ⚖️")
-st.write("Sube tu fallo en formato PDF para analizar automáticamente los autos, la resolución, la doctrina y más.")
+# Primero redimensiono  imagen con PIL
+img_redimensionada = img.resize((700, 350))
 
+# Muestro la imagen
+st.image(img_redimensionada)
+
+#st.image(img, width=700, heigth= 400)
+#----------------------------------------------
+# --> TITULO PPAL
+st.markdown("<h1 style='text-align: center;font-size: 36px;'>⚖️ Analizador de Sentencias Judiciales ⚖️</h1>", unsafe_allow_html=True)
+#st.title("⚖️ Analizador de Sentencias Judiciales ⚖️")
+
+#st.write("Sube tu fallo en formato PDF para analizar automáticamente los autos, la resolución, la doctrina y más.")
+st.markdown("<p style='text-align: center; font-size: 20px;'>Subí tu fallo en formato PDF para analizar automáticamente <br> los autos, la resolución, la doctrina y más.</p>", unsafe_allow_html=True)
+#----------------------------------------------
+# --> BARRA LATERAL
+st.sidebar.header ("Opciones")
+#----------------------------------------------
 # Lee la ruta de Tesseract desde el .env
 ruta_tesseract = os.getenv("TESSERACT_PATH")
 if ruta_tesseract:
     pytesseract.pytesseract.tesseract_cmd = ruta_tesseract
-
-# 1. SECCIÓN DE LECTURA DEL PDF 
+#----------------------------------------------
+# --> 1. SECCIÓN DE LECTURA DEL PDF 
 archivo_pdf = st.file_uploader("Cargar documento PDF", type="pdf")
 texto_extraido = ""
 
