@@ -41,3 +41,44 @@ if archivo_pdf is not None:
 
     with st.expander("Ver texto extraído"):
         st.write(texto_extraido)
+
+# 2. SECCIÓN DE IA
+st.divider()
+st.subheader("🧠 Análisis Jurídico")
+
+if st.button("Generar Análisis Jurídico", type="primary"): #--> ➡️⚙️cambiar color ❌
+    # Lee la API Key directamente del entorno de forma segura
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key: #--> ⚙️verificar funcionamiento ❌
+        st.error("⚠️ No se encontró la API Key en el archivo .env")
+    elif not texto_extraido:
+        st.warning("⚠️ Primero debes procesar un documento PDF arriba.")
+    else:
+        try:
+            genai.configure(api_key=api_key)
+            modelo = genai.GenerativeModel('gemini-2.5-flash') #--> ⚙️verificar modelo ❌
+            
+            instruccion = f"""
+            Eres un abogado experto y analista de jurisprudencia. Tu tarea es leer el siguiente texto extraído de una sentencia judicial y estructurar su análisis. Debes ser objetivo, preciso y utilizar terminología jurídica correcta. Devuelve la información estructurada con los siguientes títulos exactos: 
+            - Autos
+            - Motivo del Juicio
+            - Temas Principales
+            - Artículos Controvertidos
+            - Resolución
+            - Doctrina
+
+            Si un dato no está presente en el texto, indica 'No especificado en el documento'. 
+
+            Documento a analizar:
+            {texto_extraido}
+            """
+            
+            with st.spinner("Analizando la sentencia, extrayendo doctrina y resolución..."):
+                respuesta = modelo.generate_content(instruccion) #--> ⚙️verificar funcionamiento ❌
+                
+            st.success("¡Análisis completado!")
+            st.markdown(respuesta.text)
+            
+        except Exception as e:
+            st.error(f"Hubo un error al conectar con la IA: {e}")
